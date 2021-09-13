@@ -8,17 +8,17 @@ namespace ConsoleApp1
 		static void Main(string[] args)
 		{
 			string play = "y";
-			
-			Console.WriteLine(Reverse("Hello World!"));
-            
-			double aSurface = CalculateRectangular();
-            
-			Calculatelabor(aSurface);
+
+            Console.WriteLine(Reverse("Hello World!"));
+
+            double aSurface = CalculateRectangular();
+
+            Calculatelabor(aSurface);
             Console.WriteLine("Guessing game");
 			
 			
 
-            while(play=="y")
+            while(play == "y")
             {
 				GuessTheNumber();
 				Console.WriteLine("Do you want to play again y/n");
@@ -69,26 +69,34 @@ namespace ConsoleApp1
 
 		static void GuessTheNumber()
         {
+			int i;
 			int nTrials = 10;
 			string tHight = "Your guess is too hight";
 			string hight = "Your guess is hight";
 			string tLow = "Your guess is too low";
 			string low = "Your guess is low";
-			string gEnd = "You Lose";
+            string gEnd = "You Lose";
 			string yWin = "You Win";
 			int tNum;
+			string temp;
 
 			Random rnd = new Random();
 
 			int rNumber = rnd.Next(1, 100);
 
-            for (int i = nTrials; i > 0; i--)
+            for (i = nTrials; i > 0; i--)
             {
-				Console.WriteLine("Guess a number between 1 and 100");
+				tNum = 0;
+								
+				do
+                {
+					Console.WriteLine("Pick a number between 1 and 100");
+					temp = Console.ReadLine();
+                } while (!ValidInput(temp));
 
-				tNum = int.Parse(Console.ReadLine());
+				tNum = int.Parse(temp);
 
-                if (tNum==rNumber)
+				if (tNum==rNumber)
                 {
 					Console.WriteLine(yWin);
 					break;
@@ -111,6 +119,27 @@ namespace ConsoleApp1
 				}
 			}
 
+			if (i == 0)
+			{
+				Console.WriteLine(gEnd);
+			}
+
+		}
+
+		static bool ValidInput(string str)
+        {
+			int res=0;
+
+            try
+            {
+				res = int.Parse(str);
+            }
+            catch (Exception)
+            {
+
+            }
+
+			return int.TryParse(str, out res) && res > 0 && res < 101;
 
 		}
 
