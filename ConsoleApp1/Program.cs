@@ -7,22 +7,19 @@ namespace ConsoleApp1
 
 		static void Main(string[] args)
 		{
-			string play = "y";
+			string playAgain = "y";
 
             Console.WriteLine(Reverse("Hello World!"));
+            CalculateLabor(CalculateRectangular());
+			CalculateLabor(CalculateRound());
+            
+			Console.WriteLine("Guessing game");
 
-            double aSurface = CalculateRectangular();
-
-            Calculatelabor(aSurface);
-            Console.WriteLine("Guessing game");
-			
-			
-
-            while(play == "y")
+            while(playAgain == "y")
             {
 				GuessTheNumber();
 				Console.WriteLine("Do you want to play again y/n");
-				play = Console.ReadLine().ToLower();
+				playAgain = Console.ReadLine().ToLower();
 			}
 			
 			
@@ -42,106 +39,121 @@ namespace ConsoleApp1
 
 		static double CalculateRectangular()
         {
-			double width = 0;
-			double lenght = 0;
+			double WidthNum, LenghtNum;
+			string WidthStr,LenghtStr;
 
-			try
+            do
             {
 				Console.WriteLine("Enter Width in Centimiters");
-				width = double.Parse(Console.ReadLine()) /30.48; // convert to feet
+				WidthStr = Console.ReadLine();
 				Console.WriteLine("Enter Lenght in Centimiters");
-				lenght = double.Parse(Console.ReadLine()) / 30.48; //convert to feet
-			}
-            catch (Exception)
-            {
-				Console.WriteLine("Only numbers allowed");
-            }
+				LenghtStr = Console.ReadLine();
 
-			return width * lenght;
+			} while (!double.TryParse(WidthStr, out WidthNum) || !double.TryParse(LenghtStr, out LenghtNum));
+
+			WidthNum = double.Parse(WidthStr) /30.48; // convert to feet
+			LenghtNum = double.Parse(LenghtStr) / 30.48; //convert to feet
+
+			return WidthNum * LenghtNum;
 		}
 
-		static void Calculatelabor(double aSurface)
+		static double CalculateRound()
+		{
+			double radius;
+			double pi = 3.1415926535897931;
+			string temp;
+
+            do
+            {
+				Console.WriteLine("Enter Radius in Centimiters");
+				temp = Console.ReadLine();
+			} while (!double.TryParse(temp, out radius));
+
+			radius = radius/30.48; //convert to feet
+
+			return Math.Round(pi*radius*radius,2);
+		}
+
+		static void CalculateLabor(double Surface)
 		{
 			Console.WriteLine("Labor Estimation 20 sqf/h for 86$ ");
-			Console.WriteLine($"Estimated labour cost is: {Math.Round((aSurface/20)*86,2)} $");
-			Console.WriteLine($"Estimated labour hours is: {Math.Round(aSurface/20,2)} h");
+			Console.WriteLine($"Estimated labour cost is: {Math.Round((Surface/20)*86,2)} $");
+			Console.WriteLine($"Estimated labour hours is: {Math.Round(Surface/20,2)} h");
 		}
 
 		static void GuessTheNumber()
         {
 			int i;
-			int nTrials = 10;
-			string tHight = "Your guess is too hight";
-			string hight = "Your guess is hight";
-			string tLow = "Your guess is too low";
-			string low = "Your guess is low";
-            string gEnd = "You Lose";
-			string yWin = "You Win";
-			int tNum;
-			string temp;
+			int numOfTrials = 10;
+			string tooHightPrint = "Your guess is too hight";
+			string hightPrint = "Your guess is hight";
+			string tooLowPrint = "Your guess is too low";
+			string lowPrint = "Your guess is low";
+            string gameLosePrint = "You Lose";
+			string gameWinPrint = "You Win";
+			string youClosePrint = "You're close!";
+			int tempNumumeric;
+			string tempString;
 
 			Random rnd = new Random();
 
-			int rNumber = rnd.Next(1, 100);
+			int randomNumber = rnd.Next(1, 100);
 
-            for (i = nTrials; i > 0; i--)
-            {
-				tNum = 0;
-								
+            for (i = numOfTrials; i > 0; i--)
+            {								
 				do
                 {
 					Console.WriteLine("Pick a number between 1 and 100");
-					temp = Console.ReadLine();
-                } while (!ValidInput(temp));
+					tempString = Console.ReadLine();
+                } while (!ValidInput(tempString));
 
-				tNum = int.Parse(temp);
+				tempNumumeric = int.Parse(tempString);
 
-				if (tNum==rNumber)
+				if (tempNumumeric==randomNumber)
                 {
-					Console.WriteLine(yWin);
+					Console.WriteLine(gameWinPrint);
 					break;
 				}
-                else if(tNum - rNumber > 10) 
+                
+				if(tempNumumeric - randomNumber > 10) 
                 {
-					Console.WriteLine(tHight);
+					Console.WriteLine(tooHightPrint);
 				}
-				else if (tNum - rNumber < 10 && tNum-rNumber > 0)
+				
+				if (tempNumumeric - randomNumber < 10 && tempNumumeric-randomNumber > 0)
 				{
-					Console.WriteLine(hight);
+					Console.WriteLine(hightPrint);
 				}
-				else if (tNum - rNumber > -10 && tNum - rNumber < 0)
+				
+				if (tempNumumeric - randomNumber > -10 && tempNumumeric - randomNumber < 0)
 				{
-					Console.WriteLine(low);
+					Console.WriteLine(lowPrint);
 				}
-				else
-                {
-					Console.WriteLine(tLow);
+				
+				if (tempNumumeric - randomNumber < -10 )
+				{
+					Console.WriteLine(tooLowPrint);
+				}
+				
+				if (i == 6)
+				{
+					Console.WriteLine(youClosePrint);
 				}
 			}
 
+			
+
 			if (i == 0)
 			{
-				Console.WriteLine(gEnd);
+				Console.WriteLine(gameLosePrint);
 			}
 
 		}
 
 		static bool ValidInput(string str)
         {
-			int res=0;
-
-            try
-            {
-				res = int.Parse(str);
-            }
-            catch (Exception)
-            {
-
-            }
-
-			return int.TryParse(str, out res) && res > 0 && res < 101;
-
-		}
+            return int.TryParse(str, out int res) && res > 0 && res < 101;
+        }
 
 	}
 }
