@@ -10,8 +10,8 @@ namespace ConsoleApp1
 			string playAgain = "y";
 
             Console.WriteLine(Reverse("Hello World!"));
-            CalculateLabor(CalculateRectangular());
-			CalculateLabor(CalculateRound());
+            CalculateLabor(InputRectangulareArea());
+			CalculateLabor(InputRoundlArea());
             
 			Console.WriteLine("Guessing game");
 
@@ -25,6 +25,11 @@ namespace ConsoleApp1
 			
 		}
 
+		/// <summary>
+		/// Reversing a string
+		/// </summary>
+		/// <param name="str">String to reverce</param>
+		/// <returns>Reversed string</returns>
         static string Reverse(string str)
 		{
 			string temp = "";
@@ -37,7 +42,12 @@ namespace ConsoleApp1
 			return temp;
 		}
 
-		static double CalculateRectangular()
+		/// <summary>
+		/// Receiving 2 doubles from user (width and lenght)
+		/// and calculating surface in feets
+		/// </summary>
+		/// <returns>surface infeets</returns>
+		static double InputRectangulareArea()
         {
 			double WidthNum, LenghtNum;
 			string WidthStr,LenghtStr;
@@ -57,10 +67,15 @@ namespace ConsoleApp1
 			return WidthNum * LenghtNum;
 		}
 
-		static double CalculateRound()
+		/// <summary>
+		/// Receiving 1 doubles from user (radius)
+		/// and calculating surface in feets
+		/// </summary>
+		/// <returns>surface in feets</returns>
+		static double InputRoundlArea()
 		{
 			double radius;
-			double pi = 3.1415926535897931;
+			double pi = Math.PI;
 			string temp;
 
             do
@@ -74,6 +89,10 @@ namespace ConsoleApp1
 			return Math.Round(pi*radius*radius,2);
 		}
 
+		/// <summary>
+		/// Calculate cost of labor and estimate labor time
+		/// </summary>
+		/// <param name="Surface">surface in sqr feet</param>
 		static void CalculateLabor(double Surface)
 		{
 			Console.WriteLine("Labor Estimation 20 sqf/h for 86$ ");
@@ -81,6 +100,11 @@ namespace ConsoleApp1
 			Console.WriteLine($"Estimated labour hours is: {Math.Round(Surface/20,2)} h");
 		}
 
+		/// <summary>
+		/// Guessing Number game.
+		/// Randomly piking a number between 1 to 100.
+		/// User should guess the number with 10 triles
+		/// </summary>
 		static void GuessTheNumber()
         {
 			int i;
@@ -94,13 +118,15 @@ namespace ConsoleApp1
 			string youClosePrint = "You're close!";
 			int tempNumumeric;
 			string tempString;
+			int trialsCounter = 0;
 
 			Random rnd = new Random();
 
 			int randomNumber = rnd.Next(1, 100);
 
             for (i = numOfTrials; i > 0; i--)
-            {								
+            {
+				
 				do
                 {
 					Console.WriteLine("Pick a number between 1 and 100");
@@ -114,8 +140,10 @@ namespace ConsoleApp1
 					Console.WriteLine(gameWinPrint);
 					break;
 				}
-                
-				if(tempNumumeric - randomNumber > 10) 
+
+				trialsCounter++;
+
+				if (tempNumumeric - randomNumber > 10) 
                 {
 					Console.WriteLine(tooHightPrint);
 				}
@@ -135,21 +163,24 @@ namespace ConsoleApp1
 					Console.WriteLine(tooLowPrint);
 				}
 				
-				if (i == 6)
+				if (trialsCounter == 5)
 				{
 					Console.WriteLine(youClosePrint);
 				}
 			}
 
-			
-
-			if (i == 0)
+			if (trialsCounter == numOfTrials)
 			{
 				Console.WriteLine(gameLosePrint);
 			}
 
 		}
 
+		/// <summary>
+		/// Validate that string can be parse to double and it's between 1 and 100
+		/// </summary>
+		/// <param name="str">string representing double</param>
+		/// <returns></returns>
 		static bool ValidInput(string str)
         {
             return int.TryParse(str, out int res) && res > 0 && res < 101;
